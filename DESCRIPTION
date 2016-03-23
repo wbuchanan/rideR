@@ -1,0 +1,11 @@
+Package: rideR
+Type: Package
+Title: Web Scraping Package to get School and District data from RIDE websites
+Version: 0.0.0
+Author: Billy Buchananan
+Maintainer: Billy Buchananan <Director@paces-consulting.org>
+Description: Used to scrape data from RIDE and FRED websites
+License: GPL3
+LazyData: TRUE
+RoxygenNote: 5.0.1
+Requires: RSelenium, magrittr, dplyr, plyr, rvest, xml2
