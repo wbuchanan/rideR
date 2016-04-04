@@ -1,18 +1,29 @@
 #' @title rideReportCards
-#' @description Scrapes ESEA accountability report card data from RIDE
+#' @description Generates lists of URLs containing the HTML ESEA report cards
 #' @param parallel Indicator of whether or not to use parallelized function calls
 #' when
-#' @param distout The name of the file where the district level html will be saved
-#' @param schout The name of the file where the school level html will be saved
+#' @param distout The name of the file where the district level URLs
+#' @param schout The name of the file where the school level URLs
 #' @importFrom plyr llply
 #' @import magrittr
 #' @importFrom rvest html_nodes html_attr html_node
 #' @importFrom xml2 read_html
 #' @examples \donttest{
-#' # Get report card content quickly
-#' rideAMO <- rima::rimaParallel(8) %>% rideReportCards()
+#' # Gets the URLs containing all of the ESEA report card websites
+#' rideAMO <- rideR::rideParallel(8) %>% rideR::rideReportCards()
+#'
+#' # Shows the number of District-level report card sites
+#' length(rideAMO[[1]])
+#'
+#' # Shows the number of School-level report card sites
+#' length(rideAMO[[2]])
+#'
+#' # Save this to disk so you can read the data in the future w/o the need for
+#' # connections
+#' saveRDS(rcUrls, file = "~/Desktop/RIMA/reportCardUrls.Rds")
 #' }
-#' @return A list containing the list of district and list of school HTML content
+#' @return A list containing the list of district and list of school URLs
+#' @export rideReportCards
 #'
 
 rideReportCards <- function(parallel = FALSE, distout = NULL, schout = NULL) {
@@ -89,41 +100,13 @@ rideReportCards <- function(parallel = FALSE, distout = NULL, schout = NULL) {
 	# Ends outer call to llply then stores all of the urls in a flattened list
 	}) %>% unlist() %>% as.list()
 
-	# Scrapes HTML content from each of the district URLs across years
-	districts <- plyr::llply(eseaDistricts, .parallel = parallel, .fun = function(x) {
-
-		# Gets the table elements from the URL
-		tabs <- xml2::read_html(x) %>% rvest::html_nodes("table")
-
-		# Names the list element with the URL
-		names(tabs) <- x
-
-		# Returns the HTML as a named list
-		return(tabs)
-
-	}) # End of llply call for district sites
-
-	# Scrapes HTML content from each of the school URLs across years
-	schools <- plyr::llply(eseaSchools, .parallel = parallel, .fun = function(x) {
-
-		# Gets the table elements from the URL
-		tabs <- xml2::read_html(x) %>% rvest::html_nodes("table")
-
-		# Names the list element with the URL
-		names(tabs) <- x
-
-		# Returns the HTML as a named list
-		return(tabs)
-
-	}) # End of llply call for school sites
-
 	# Serialize the district HTML to disk if file name is passed to function
-	if (!is.null(distout)) saveRDS(districts, file = distout)
+	if (!is.null(distout)) saveRDS(eseaDistricts, file = distout)
 
 	# Serialize the school HTML to disk if file name is passed to function
-	if (!is.null(schout)) saveRDS(schools, file = schout)
+	if (!is.null(schout)) saveRDS(eseaSchools, file = schout)
 
 	# Return a list object with the HTML content
-	return(list("districts" = districts, "schools" = schools))
+	return(list("districts" = eseaDistricts, "schools" = eseaSchools))
 
 } # End Function definition

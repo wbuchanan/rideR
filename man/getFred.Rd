@@ -33,4 +33,14 @@ contains the link used to trigger download options
 A brute force approach to identifying candidate URLs that may
 have Frequently Requested Educational Data files for download.
 }
+\examples{
+\donttest{
+
+# Check the range of sites that may have valid data download links from the
+# Frequently Requested Educational Data web portal.  This will check for
+# all sites with fileID values of 0 - 100,000
+sites <- rideR::getFred()
+
+}
+}
 

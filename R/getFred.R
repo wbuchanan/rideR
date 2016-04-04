@@ -18,6 +18,15 @@
 #' @importFrom xml2 read_html
 #' @return A data frame containing the URLs and Booleans indicating if the URL
 #' contains the link used to trigger download options
+#' @examples \donttest{
+#'
+#' # Check the range of sites that may have valid data download links from the
+#' # Frequently Requested Educational Data web portal.  This will check for
+#' # all sites with fileID values of 0 - 100,000
+#' sites <- rideR::getFred()
+#'
+#' }
+#' @export getFred
 #'
 
 getFred <- function(start = 0, end = 100000, candidatesOnly = TRUE,

@@ -10,20 +10,30 @@ rideReportCards(parallel = FALSE, distout = NULL, schout = NULL)
 \item{parallel}{Indicator of whether or not to use parallelized function calls
 when}
 
-\item{distout}{The name of the file where the district level html will be saved}
+\item{distout}{The name of the file where the district level URLs}
 
-\item{schout}{The name of the file where the school level html will be saved}
+\item{schout}{The name of the file where the school level URLs}
 }
 \value{
-A list containing the list of district and list of school HTML content
+A list containing the list of district and list of school URLs
 }
 \description{
-Scrapes ESEA accountability report card data from RIDE
+Generates lists of URLs containing the HTML ESEA report cards
 }
 \examples{
 \donttest{
-# Get report card content quickly
-rideAMO <- rima::rimaParallel(8) \%>\% rideReportCards()
+# Gets the URLs containing all of the ESEA report card websites
+rideAMO <- rideR::rideParallel(8) \%>\% rideR::rideReportCards()
+
+# Shows the number of District-level report card sites
+length(rideAMO[[1]])
+
+# Shows the number of School-level report card sites
+length(rideAMO[[2]])
+
+# Save this to disk so you can read the data in the future w/o the need for
+# connections
+saveRDS(rcUrls, file = "~/Desktop/RIMA/reportCardUrls.Rds")
 }
 }
 

@@ -27,10 +27,10 @@ Uses Selenium to simulate website interactions to download data
 \donttest{
 
 # Set up parallel processing if wanted
-useParallel <- rimaParallel(8)
+useParallel <- rideR::rideParallel(8)
 
 # Search over first 100,000 pages with IDs [0, 100000]
-urls <- getFred(isParallel = useParallel)
+urls <- rideR::getFred(isParallel = useParallel)
 
 # Download the files and save/scrape the metadata
 dlFredData(urls, parallel = useParallel, meta = TRUE, output = "~/Desktop/fredMetaData.csv")
